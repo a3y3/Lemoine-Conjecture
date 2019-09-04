@@ -35,18 +35,35 @@ public class Sequential {
         low = low % 2 == 0 ? low + 1 : low;
         high = high % 2 == 0 ? high - 1 : high;  //Make sure low and high are odd
         for (int i = low; i <= high; i += 2) {
-            Prime.Iterator pIterator = new Prime.Iterator();
-            Prime.Iterator qIterator = new Prime.Iterator();
-            int p = pIterator.next(), q = qIterator.next();
+            int[] pAndQ = getPrimes(i);
+        }
+    }
 
-            for (; p + (2 * q) != i; p = pIterator.next()) {
-                while ((p + (2 * q)) < i) {
-                    q = qIterator.next();
-                }
-                qIterator.restart();
+    /**
+     * Given a number, finds two primes @code{p} and @code{q} such that number = p + 2q.
+     *
+     * @param number the number for which thw primes are supposed to be found. @code{
+     *               number} must be odd.
+     *
+     * @return an array containing p in index 0 and q in index 1.
+     */
+    private int[] getPrimes(int number) {
+        Prime.Iterator pIterator = new Prime.Iterator();
+        Prime.Iterator qIterator = new Prime.Iterator();
+        int p = pIterator.next();
+        int q = 2;        // q is allowed to be even, so start with 2
+
+        for (; p + (2 * q) != number; p = pIterator.next()) {
+            while ((p + (2 * q)) < number) {
                 q = qIterator.next();
             }
-            System.out.println(i + " = " + p + " + 2*" + q);
+            if (p + (2 * q) == number){
+                break;
+            }
+            qIterator.restart();
+            q = 2;
         }
+        System.out.println(number + " = " + p + " + 2*" + q);
+        return new int[]{p, q};
     }
 }
