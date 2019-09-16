@@ -21,11 +21,13 @@ class ArgumentParser {
             conjecture.low = Integer.parseInt(args[0]);
             conjecture.high = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
+            System.out.println("Argument error.");
             System.err.println("Arguments one and two are incorrect. See below for " +
                     "details. Exiting ...");
             displayHelp();
         }
         if (conjecture.low > conjecture.high) {
+            System.out.println("Argument error.");
             System.err.println("low cannot be greater than high. See below for details");
             displayHelp();
         }

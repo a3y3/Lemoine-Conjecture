@@ -69,7 +69,7 @@ public class LemoineConjecture {
         int printCounter = 0;
         for (int i = low; i <= high; i += 2) {
             int[] pAndQ = getPrimes(i);
-            if (maxP < pAndQ[0]){
+            if (maxP <= pAndQ[0]){
                 maxP = pAndQ[0];
                 finalQ = pAndQ[1];
                 finalNumber = i;
