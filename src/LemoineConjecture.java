@@ -2,14 +2,15 @@
  * @author Soham Dongargaonkar [sd4324] on 31/08/19
  */
 public class LemoineConjecture {
-    private int low;
-    private int high;
+    int low;
+    int high;
+    boolean verboseOutputs;
 
-    // if enabled using -v, print p and q for all numbers in range
-    private boolean verboseOutputs;
+    private static final String SEQ_MODE = "SEQUENTIAL";
+    private final String PARALLEL_MODE = "PARALLEL";
 
     /**
-     * initialize both low and high with 2. These are the lowest valid primes.
+     * Initializes both low and high with 2. These are the lowest valid primes.
      *
      * The suppressed warning is to prevent IntelliJ from complaining about adding a
      * private access modifier to this constructor.
@@ -29,72 +30,28 @@ public class LemoineConjecture {
      */
     public static void main(String[] args) {
         LemoineConjecture conjecture = new LemoineConjecture();
-        conjecture.parseArguments(args);
-        conjecture.runSequential();
+        new ArgumentParser(conjecture).parseArguments(args);
+
+        System.out.println("*** STARTING SERIAL EXECUTION ***");
+        conjecture.runProgram(SEQ_MODE);
     }
 
+
     /**
-     * Parses arguments and sets high and low values.
+     * Runs either the sequential or the parallel version depending on the {@code mode}
+     * passed.
      *
-     * @param args arguments from STDIN
-     * @throws IllegalStateException if low > high, ie. args[0] > args[1].
+     * @param mode either sequential or parallel. The appropriate version of the
+     *             program is called depending upon this value.
      */
-    private void parseArguments(String[] args) {
-        low = Integer.parseInt(args[0]);
-        high = Integer.parseInt(args[1]);
-        if (low > high) {
-            throw new IllegalStateException("low cannot exceed high, check " +
-                    "arguments");
+    private void runProgram(String mode){
+        long startTime = System.nanoTime();
+        if (mode.equals(SEQ_MODE)) {
+            scanOddNumbers();
         }
-        for (int i = 2; i < args.length; i++){
-            if (args[i].equals("-v")){
-                verboseOutputs = true;
-                break;      //For performance, MUST remove if adding more flags.
-            }
-            else if(args[i].equals(("-h"))){
-                displayHelp();
-            }
-        }
-    }
-
-    /**
-     * Displays usages and quits the JVM. Be cautious; using this method will quit this
-     * program, so use only if the arguments supplied are incorrect or if the user
-     * wishes to see how to use the program by specifying the -h flag.
-     */
-    private void displayHelp(){
-        System.out.println("USAGE");
-        System.out.println("java LemoineConjecture [low] [high] | " +  "[OPTIONAL_FLAG " +
-                "1] [OPTIONAL_FLAG 2]" );
-        System.out.println();
-        System.out.println();
-        System.out.println("EXPLANATION");
-        System.out.println("Lemoine's Conjecture states that for any odd number n, a " +
-                "combination of primes p and q exists such that n = p + 2q.");
-        System.out.println("This program finds p and q for all odd numbers between the " +
-                "range low and high.");
-        System.out.println("The default behaviour of the program will print ONE number " +
-                "for which the p value is the highest. See verbose flag below for the " +
-                "other possible behaviour.");
-        System.out.println();
-        System.out.println("low: must be an integer. This number specifies the starting" +
-                " range for running the conjecture.");
-        System.out.println("high: must be an integer. This number specifies the ending " +
-                "range for running the conjecture.");
-        System.out.println();
-        System.out.println();
-        System.out.println("OPTIONAL FLAGS");
-        System.out.println("Can be in any order, but must be of the following");
-        System.out.println("-v: verbose outputs. Output p and q values for ALL the " +
-                "numbers in the range, instead of outputting only one value.");
-        System.out.println("-h: help. Displays this document.");
-        System.exit(0);
-    }
-    /**
-     * Calls {@code scanOdd}
-     */
-    private void runSequential(){
-        scanOddNumbers();
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Time taken for execution:" + elapsedTime / 1000000 + " ms");
     }
     /**
      * Contains a for loop that iterators over odd numbers, and calls {@code getPrimes
