@@ -24,13 +24,13 @@ public class LemoineConjecture {
     /**
      * Parses arguments, and runs sequential and parallel versions of the program.
      *
-     * @param args arguments from STDIN. See @code{java LemoineConjecture -h} for help
+     * @param args arguments from STDIN. See {@code java LemoineConjecture -h} for help
      *             and usage.
      */
     public static void main(String[] args) {
-        LemoineConjecture sequential = new LemoineConjecture();
-        sequential.parseArguments(args);
-        sequential.scanOddNumbers();
+        LemoineConjecture conjecture = new LemoineConjecture();
+        conjecture.parseArguments(args);
+        conjecture.runSequential();
     }
 
     /**
@@ -51,14 +51,57 @@ public class LemoineConjecture {
                 verboseOutputs = true;
                 break;      //For performance, MUST remove if adding more flags.
             }
+            else if(args[i].equals(("-h"))){
+                displayHelp();
+            }
         }
     }
 
     /**
-     * Contains a for loop that iterators over odd numbers, and calls @code{getPrimes
-     * (i)} for each @code{i} in the loop.
-     * Depending on the value of @code{verboseOutputs}, the value "i=p+2q" is printed.
-     * If @code{verboseOutputs} is false (default), only the highest @code{i} is printed.
+     * Displays usages and quits the JVM. Be cautious; using this method will quit this
+     * program, so use only if the arguments supplied are incorrect or if the user
+     * wishes to see how to use the program by specifying the -h flag.
+     */
+    private void displayHelp(){
+        System.out.println("USAGE");
+        System.out.println("java LemoineConjecture [low] [high] | " +  "[OPTIONAL_FLAG " +
+                "1] [OPTIONAL_FLAG 2]" );
+        System.out.println();
+        System.out.println();
+        System.out.println("EXPLANATION");
+        System.out.println("Lemoine's Conjecture states that for any odd number n, a " +
+                "combination of primes p and q exists such that n = p + 2q.");
+        System.out.println("This program finds p and q for all odd numbers between the " +
+                "range low and high.");
+        System.out.println("The default behaviour of the program will print ONE number " +
+                "for which the p value is the highest. See verbose flag below for the " +
+                "other possible behaviour.");
+        System.out.println();
+        System.out.println("low: must be an integer. This number specifies the starting" +
+                " range for running the conjecture.");
+        System.out.println("high: must be an integer. This number specifies the ending " +
+                "range for running the conjecture.");
+        System.out.println();
+        System.out.println();
+        System.out.println("OPTIONAL FLAGS");
+        System.out.println("Can be in any order, but must be of the following");
+        System.out.println("-v: verbose outputs. Output p and q values for ALL the " +
+                "numbers in the range, instead of outputting only one value.");
+        System.out.println("-h: help. Displays this document.");
+        System.exit(0);
+    }
+    /**
+     * Calls {@code scanOdd}
+     */
+    private void runSequential(){
+        scanOddNumbers();
+    }
+    /**
+     * Contains a for loop that iterators over odd numbers, and calls {@code getPrimes
+     * (i)} for each {@code i} in the loop.
+     * Depending on the value of {@code verboseOutputs}, the value "i=p+2q" is printed.
+     * If {@code verboseOutputs} is false (default), only the highest {@code i} is
+     * printed.
      */
     private void scanOddNumbers() {
         low = low % 2 == 0 ? low + 1 : low;
@@ -86,9 +129,9 @@ public class LemoineConjecture {
     }
 
     /**
-     * Given a number, finds two primes @code{p} and @code{q} such that number = p + 2q.
+     * Given a number, finds two primes {@code p} and {@code q} such that number = p + 2q.
      *
-     * @param number the number for which thw primes are supposed to be found. @code{
+     * @param number the number for which thw primes are supposed to be found. {@code
      *               number} must be odd.
      *
      * @return an array containing p in index 0 and q in index 1.
