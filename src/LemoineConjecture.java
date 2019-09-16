@@ -1,21 +1,34 @@
 /**
  * @author Soham Dongargaonkar [sd4324] on 31/08/19
  */
-public class Sequential {
+public class LemoineConjecture {
     private int low;
     private int high;
 
     // if enabled using -v, print p and q for all numbers in range
     private boolean verboseOutputs;
 
-    private Sequential() {
+    /**
+     * initialize both low and high with 2. These are the lowest valid primes.
+     *
+     * The suppressed warning is to prevent IntelliJ from complaining about adding a
+     * private access modifier to this constructor.
+     */
+    @SuppressWarnings("WeakerAccess")
+    LemoineConjecture() {
         low = 2;
-        high = 2;   //Default low and high values to lowest valid prime
+        high = 2;
         verboseOutputs = false; // Default behaviour prints only highest prime
     }
 
+    /**
+     * Parses arguments, and runs sequential and parallel versions of the program.
+     *
+     * @param args arguments from STDIN. See @code{java LemoineConjecture -h} for help
+     *             and usage.
+     */
     public static void main(String[] args) {
-        Sequential sequential = new Sequential();
+        LemoineConjecture sequential = new LemoineConjecture();
         sequential.parseArguments(args);
         sequential.scanOddNumbers();
     }
@@ -53,12 +66,17 @@ public class Sequential {
         int maxP = -1;
         int finalQ = -1;
         int finalNumber = - 1;
+        int printCounter = 0;
         for (int i = low; i <= high; i += 2) {
             int[] pAndQ = getPrimes(i);
             if (maxP < pAndQ[0]){
                 maxP = pAndQ[0];
                 finalQ = pAndQ[1];
                 finalNumber = i;
+            }
+            printCounter ++;
+            if (printCounter % 10 == 0) {
+                System.out.println("scanning " + i);
             }
             if (verboseOutputs){
                 System.out.println(i + " = " + pAndQ[0] + " + 2*" + pAndQ[1]);
@@ -81,7 +99,7 @@ public class Sequential {
         int p = pIterator.next();
         int q = 2;        // q is allowed to be even, so start with 2
 
-        for (; p + (2 * q) != number; p = pIterator.next()) {
+        for (; p + (2 * q) <= number; p = pIterator.next()) {
             while ((p + (2 * q)) < number) {
                 q = qIterator.next();
             }
