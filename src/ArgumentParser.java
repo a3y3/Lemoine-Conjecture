@@ -20,7 +20,7 @@ class ArgumentParser {
         try {
             conjecture.low = Integer.parseInt(args[0]);
             conjecture.high = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             System.out.println("Argument error.");
             System.err.println("Arguments one and two are incorrect. See below for " +
                     "details. Exiting ...");
