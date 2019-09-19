@@ -135,15 +135,15 @@ public class LemoineConjecture {
         int p = pIterator.next();
         int q = 2;        // q is allowed to be even, so start with 2
 
-        for (; p + (2 * q) <= number; p = pIterator.next()) {
-            while ((p + (2 * q)) < number) {
-                q = qIterator.next();
+        for (; p <= number; p = pIterator.next()) {
+            if ((number - p ) % 2 == 0) {
+                int tempQ = (number - p) / 2;
+                if(Prime.isPrime(tempQ)){
+                    q = tempQ;
+                    break;
+                }
             }
-            if (p + (2 * q) == number) {
-                break;
-            }
-            qIterator.restart();
-            q = 2;
+
         }
         return new int[]{p, q};
     }
