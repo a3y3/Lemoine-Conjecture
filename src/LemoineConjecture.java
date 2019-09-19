@@ -13,7 +13,7 @@ public class LemoineConjecture {
 
     /**
      * Initializes both low and high with 2. These are the lowest valid primes.
-     *
+     * <p>
      * The suppressed warning is to prevent IntelliJ from complaining about adding a
      * private access modifier to this constructor.
      */
@@ -34,12 +34,12 @@ public class LemoineConjecture {
         LemoineConjecture conjecture = new LemoineConjecture();
         new ArgumentParser(conjecture).parseArguments(args);
 
-        System.out.println("*** STARTING SERIAL EXECUTION ***");
-        conjecture.runProgram(SEQ_MODE);
-
         System.out.println();
         System.out.println("*** STARTING PARALLEL EXECUTION ***");
         conjecture.runProgram(PARALLEL_MODE);
+
+        System.out.println("*** STARTING SERIAL EXECUTION ***");
+        conjecture.runProgram(SEQ_MODE);
     }
 
 
@@ -50,18 +50,18 @@ public class LemoineConjecture {
      * @param mode either sequential or parallel. The appropriate version of the
      *             program is called depending upon this value.
      */
-    private void runProgram(String mode){
+    private void runProgram(String mode) {
         long startTime = System.nanoTime();
         if (mode.equals(SEQ_MODE)) {
             scanOddNumbersSequential();
-        }
-        else{
+        } else {
             scanOddNumbersParallel();
         }
         long endTime = System.nanoTime();
         long elapsedTime = endTime - startTime;
         System.out.println("Time taken for execution:" + elapsedTime / 1000000 + " ms");
     }
+
     /**
      * Contains a for loop that iterators over odd numbers, and calls {@code getPrimes
      * (i)} for each {@code i} in the loop.
@@ -74,15 +74,15 @@ public class LemoineConjecture {
         high = high % 2 == 0 ? high - 1 : high;  //Make sure low and high are odd
         int maxP = -1;
         int finalQ = -1;
-        int finalNumber = - 1;
+        int finalNumber = -1;
         for (int i = low; i <= high; i += 2) {
             int[] pAndQ = getPrimes(i);
-            if (maxP <= pAndQ[0]){
+            if (maxP <= pAndQ[0]) {
                 maxP = pAndQ[0];
                 finalQ = pAndQ[1];
                 finalNumber = i;
             }
-            if (verboseOutputs){
+            if (verboseOutputs) {
                 System.out.println(i + " = " + pAndQ[0] + " + 2*" + pAndQ[1]);
             }
         }
@@ -99,25 +99,27 @@ public class LemoineConjecture {
     private void scanOddNumbersParallel() {
         low = low % 2 == 0 ? low + 1 : low;
         high = high % 2 == 0 ? high - 1 : high;  //Make sure low and high are odd
-        int maxP = -1;
-        int finalQ = -1;
-        int finalNumber = - 1;
+        int[] maxP = new int[]{-1};
+        int[] finalQ = new int[]{-1};
+        int[] finalNumber = new int[]{-1};
 
-        // omp parallel for global(maxP, finalQ, finalNumber)
+        // omp parallel for
         for (int i = low; i <= high; i += 2) {
             int[] pAndQ = getPrimes(i);
-            if (maxP <= pAndQ[0]){
-                maxP = pAndQ[0];
-                finalQ = pAndQ[1];
-                finalNumber = i;
+            if (maxP[0] <= pAndQ[0]) {
+                maxP[0] = pAndQ[0];
+                finalQ[0] = pAndQ[1];
+                finalNumber[0] = i;
             }
-            if (verboseOutputs){
-                System.out.println(i + " = " + pAndQ[0] + " + 2*" + pAndQ[1] + "ID: " + OMP4J_THREAD_NUM);
-                System.out.println(i + " final = " + maxP + " + 2*" + finalQ + "ID: " + OMP4J_THREAD_NUM);
+            if (verboseOutputs) {
+                System.out.println(i + " = " + pAndQ[0] + " + 2*" + pAndQ[1] + "\tID: "
+                        + OMP4J_THREAD_NUM);
+                System.out.println(i + " final = " + maxP[0] + " + 2*" + finalQ[0] +
+                        "\tID:" + " " + OMP4J_THREAD_NUM);
             }
 
         }
-        System.out.println(finalNumber + " = " + maxP + " + 2*" + finalQ);
+        System.out.println(finalNumber[0] + " = " + maxP[0] + " + 2*" + finalQ[0]);
     }
 
     /**
@@ -125,11 +127,9 @@ public class LemoineConjecture {
      *
      * @param number the number for which thw primes are supposed to be found. {@code
      *               number} must be odd.
-     *
      * @return an array containing p in index 0 and q in index 1.
      */
     private int[] getPrimes(int number) {
-        System.out.println("Getting primes for " + number);
         Prime.Iterator pIterator = new Prime.Iterator();
         Prime.Iterator qIterator = new Prime.Iterator();
         int p = pIterator.next();
@@ -139,7 +139,7 @@ public class LemoineConjecture {
             while ((p + (2 * q)) < number) {
                 q = qIterator.next();
             }
-            if (p + (2 * q) == number){
+            if (p + (2 * q) == number) {
                 break;
             }
             qIterator.restart();
