@@ -125,10 +125,8 @@ public class LemoineConjecture {
                 finalNumber[0] = i;
             }
             if (verboseOutputs) {
-                System.out.println(i + " = " + pAndQ[0] + " + 2*" + pAndQ[1] + "\tID: "
+                System.out.println(i + " = " + pAndQ[0] + " + 2*" + pAndQ[1] + "\tt_ID: "
                         + OMP4J_THREAD_NUM);
-                System.out.println(i + " final = " + maxP[0] + " + 2*" + finalQ[0] +
-                        "\tID:" + " " + OMP4J_THREAD_NUM);
             }
 
         }
@@ -144,7 +142,6 @@ public class LemoineConjecture {
      */
     private int[] getPrimes(int number) {
         Prime.Iterator pIterator = new Prime.Iterator();
-        Prime.Iterator qIterator = new Prime.Iterator();
         int p = pIterator.next();
         int q = 2;        // q is allowed to be even, so start with 2
 
