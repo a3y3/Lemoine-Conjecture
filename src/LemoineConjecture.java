@@ -1,6 +1,15 @@
-import java.util.ArrayList;
-
 /**
+ * Lemoine's Conjecture states that each odd number n > 5 can be represented
+ * as n = p + 2q, where p and q are prime numbers.
+ * <p>
+ * The class accepts a lower and an upper bound and prints a single number n
+ * in that range that has the highest p value.
+ * <p>
+ * You can also run the program with the -v flag to see all the numbers,
+ * instead of only the number with the largest p value.
+ * <p>
+ * Run the program with -h for help and examples.
+ *
  * @author Soham Dongargaonkar [sd4324] on 31/08/19
  */
 public class LemoineConjecture {
@@ -34,12 +43,11 @@ public class LemoineConjecture {
         LemoineConjecture conjecture = new LemoineConjecture();
         new ArgumentParser(conjecture).parseArguments(args);
 
+        System.out.println("*** STARTING SERIAL EXECUTION ***");
+        conjecture.runProgram(SEQ_MODE);
         System.out.println();
         System.out.println("*** STARTING PARALLEL EXECUTION ***");
         conjecture.runProgram(PARALLEL_MODE);
-
-        System.out.println("*** STARTING SERIAL EXECUTION ***");
-        conjecture.runProgram(SEQ_MODE);
     }
 
 
@@ -92,6 +100,11 @@ public class LemoineConjecture {
     /**
      * Contains a for loop that iterators over odd numbers, and calls {@code getPrimes
      * (i)} for each {@code i} in the loop.
+     * <p>
+     * The method is different from {@code scanOffNumbersSequential()} in that this
+     * method contains a comment for parallelizing the scanning. If the program is
+     * compiled with omp4j (and not javac), the method will run parallelly.
+     * <p>
      * Depending on the value of {@code verboseOutputs}, the value "i=p+2q" is printed.
      * If {@code verboseOutputs} is false (default), only the highest {@code i} is
      * printed.
@@ -136,14 +149,13 @@ public class LemoineConjecture {
         int q = 2;        // q is allowed to be even, so start with 2
 
         for (; p <= number; p = pIterator.next()) {
-            if ((number - p ) % 2 == 0) {
+            if ((number - p) % 2 == 0) {
                 int tempQ = (number - p) / 2;
-                if(Prime.isPrime(tempQ)){
+                if (Prime.isPrime(tempQ)) {
                     q = tempQ;
                     break;
                 }
             }
-
         }
         return new int[]{p, q};
     }

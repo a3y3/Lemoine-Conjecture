@@ -75,6 +75,7 @@ class ArgumentParser {
         System.out.println();
         System.out.println();
         System.out.println("EXAMPLE");
+        System.out.println("omp4j *.java");
         System.out.println("1.\tjava LemoineConjecture 100 1000");
         System.out.println("2.\tjava LemoineConjecture 10000 50000 -v");
         System.exit(0);
